@@ -1,0 +1,19 @@
+#! /bin/bash
+CPTY="./cpty.txt"
+BE="./be.txt"
+
+CDRLIST=$(awk -F',' '{ print $1 } ' < ${CPTY} | sort -u)
+#echo "$CDRLIST"
+CDRSHORTLIST=$(awk -F',' '{ print $2 } ' < ${CPTY} | sort -u)
+#echo "$CDRSHORTLIST"
+
+for CDR in ${CDRLIST=// / } ; do
+  awk -v cdr=$CDR -F',' '{ if ($2 == cdr || $3 == cdr) {print $0} }' < "$BE"
+done
+
+for CDRSHORTLIST in ${CDRSHORTLIST=// / } ; do
+ # awk -v cdrshort=$CDRSHORTLIST -F',' '{ if ($4 == cdrshort || $5 == cdrshort) {print $0} }' < "$BE"
+ awk -v cdrshort=$CDRSHORTLIST -F',' '{if ($4 == cdrshort) {print $0} }' < "$BE"
+done
+
+
